@@ -50,7 +50,7 @@ function CampsiteInfo(props) {
           <div className="row">
             <div className="col">
               <Breadcrumb>
-                <BreadcrumbItem><Link to="/direcctory">Directory</Link></BreadcrumbItem>
+                <BreadcrumbItem><Link to="/directory">Directory</Link></BreadcrumbItem>
                 <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
               </Breadcrumb>
               <h2>{props.campsite.name}</h2>

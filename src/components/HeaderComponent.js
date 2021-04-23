@@ -32,7 +32,6 @@ class Header extends Component {
             </div>
           </div>
         </Jumbotron>
-
         <Navbar dark sticky="top" expand="md">
           <div className="container">
             <NavbarBrand className="mr-auto" href="/"><img src="/assets/images/logo.png" height="30" width="30" alt="NuCamp Logo"/></NavbarBrand>
