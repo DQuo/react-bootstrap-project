@@ -1,6 +1,87 @@
-import React from 'react';
-import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, {Component} from 'react';
+import {Button, Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
+
+
+class CommentForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { isModalOpen: false };
+    this.modalToggle = this.modalToggle.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+  modalToggle() {
+    this.setState({ isModalOpen: !this.state.isModalOpen})
+  }
+
+  handleFormSubmit(formData) {
+    console.log("Current state is: " + JSON.stringify(formData));
+    alert("Current state is: " + JSON.stringify(formData));
+  }
+
+  render() {
+    return (
+      <>
+        <Button outline onClick={this.modalToggle}>
+          <i className="fa fa-pencil fa-lg" />{' '}
+          Submit Comment
+        </Button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.modalToggle}>
+          <ModalHeader toggle={this.modalToggle}>Submit Comment</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={(formData) => this.handleFormSubmit(formData)}>
+              <Row>
+                <Col>
+                  <Label htmlFor="rating">Rating</Label>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Control.select model=".rating" id="rating" className="form-control mb-3">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </Control.select>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Label htmlFor="author">Your Name</Label>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Control.text model=".author" id="author" name="author" className="form-control mb-3" />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Label htmlFor="text">Comment</Label>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Control.textarea model=".text" id="text" name="text" className="form-control mb-3" rows="6" />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Button type="submit">Submit</Button>
+                </Col>
+              </Row>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
+      </>
+    );
+  }
+}
+
 
 function RenderCampsite({campsite}) {
   return (
@@ -32,13 +113,13 @@ function RenderComments({comments}) {
             </>
           );
         })}
+        <CommentForm />
       </div>
     );
   }
 
   return <div></div>;
 }
-
 
 
 function CampsiteInfo(props) {
