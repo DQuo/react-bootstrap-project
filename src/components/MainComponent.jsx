@@ -9,11 +9,13 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addComment, fetchCampsites } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 
 
 const mapDispatchToProps = {
   addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
-  fetchCampsites: () => (fetchCampsites())
+  fetchCampsites: () => (fetchCampsites()),
+  resetFeedbackForm: () => (actions.reset('feedbackForm'))
 }
 
 const mapStateToProps = (state) => {
@@ -25,6 +27,7 @@ const mapStateToProps = (state) => {
   }
 }
 
+// Primary Component: <Main />
 class Main extends Component {
 
   componentDidMount() {
@@ -36,7 +39,7 @@ class Main extends Component {
     const HomePage = () => {
       return (
         <Home
-          campsite={this.props.campsites.filter((campsite) => campsite.featured)[0]}
+          campsite={this.props.campsites.campsites.filter((campsite) => campsite.featured)[0]}
           campsitesLoading={this.props.campsites.isLoading}
           campsitesErrMess={this.props.campsites.errMess}
           promotion={this.props.promotions.filter((promotion) => promotion.featured)[0]}
@@ -48,7 +51,7 @@ class Main extends Component {
     const CampsiteWithId = ({match}) => {
       return (
         <CampsiteInfo 
-          campsite={this.props.campsites.filter((campsite) => campsite.id === +match.params.campsiteId)[0]}
+          campsite={this.props.campsites.campsites.filter((campsite) => campsite.id === +match.params.campsiteId)[0]}
           isLoading={this.props.campsites.isLoading}
           errMess={this.props.campsites.errMess}
           comments={this.props.comments.filter((comment) => comment.campsiteId === +match.params.campsiteId)}
@@ -65,7 +68,7 @@ class Main extends Component {
           <Route exact path="/directory" render={() => { return <Directory campsites={this.props.campsites} />; }} />
           <Route path='/directory/:campsiteId' component={CampsiteWithId} />
           <Route path='/aboutus' render={() => <About partners={this.props.partners} />} />
-          <Route exact path="/contactus" component={Contact} />
+          <Route exact path="/contactus" render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
           <Redirect to="/home" />
         </Switch>
         <Footer />

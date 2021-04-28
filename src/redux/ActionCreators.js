@@ -9,7 +9,7 @@ export const addComment = (campsiteId, rating, author, text) => ({
     author: author,
     text: text
   }
-})
+});
 
 export const fetchCampsites = () => dispatch => {
 
