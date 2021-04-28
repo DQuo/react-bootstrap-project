@@ -2,20 +2,27 @@ import React, {Component} from 'react';
 import {Button, Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
 const required = val => val && val.length;
 const maxLength = len => val => !val || (val.length <= len);
 const minLength = len => val => val && (val.length >= len);
 
+
+// Local Component: <CommentForm />
 class CommentForm extends Component {
 
   constructor(props) {
     super(props);
+    // State
     this.state = { isModalOpen: false };
+
+    // Binds
     this.modalToggle = this.modalToggle.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
+  // Methods
   modalToggle() {
     this.setState({ isModalOpen: !this.state.isModalOpen})
   }
@@ -25,6 +32,7 @@ class CommentForm extends Component {
     this.props.addComment(this.props.campsiteId, formData.rating, formData.author, formData.text);
   }
 
+  // Render
   render() {
     return (
       <>
@@ -107,6 +115,7 @@ class CommentForm extends Component {
 }
 
 
+// Local Component: <RenderCampsite />
 function RenderCampsite({campsite}) {
   return (
     <div className="col-md-5 m-1">
@@ -121,6 +130,8 @@ function RenderCampsite({campsite}) {
   );
 }
 
+
+// Local Component: <RenderComments />
 function RenderComments({comments, addComment, campsiteId}) {
   if (comments) {
     return (
@@ -146,40 +157,59 @@ function RenderComments({comments, addComment, campsiteId}) {
 }
 
 
+// Primary Component: <CampsiteInfo />
 function CampsiteInfo(props) {
 
-  const render = ( 
-    props.campsite ? 
-      ( 
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <Breadcrumb>
-                <BreadcrumbItem><Link to="/directory">Directory</Link></BreadcrumbItem>
-                <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
-              </Breadcrumb>
-              <h2>{props.campsite.name}</h2>
-              <hr />
-            </div>
-          </div>
-          <div className="row">
-            <RenderCampsite campsite={props.campsite} />
-            <RenderComments 
-              comments={props.comments}
-              addComment={props.addComment}
-              campsiteId={props.campsite.id} 
-            />
+  if (props.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (props.errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h4>{props.errMess}</h4>
           </div>
         </div>
-      ) : 
-      ( 
-        <div>
+      </div>
+    )
+  }
 
-        </div> 
-      ) 
-  );
+  if (props.campsite) {
+    <div className="container">
 
-    return render;
+      <div className="row">
+        <div className="col">
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/directory">Directory</Link></BreadcrumbItem>
+            <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
+          </Breadcrumb>
+          <h2>{props.campsite.name}</h2>
+          <hr />
+        </div>
+      </div>
+
+      <div className="row">
+        <RenderCampsite campsite={props.campsite} />
+        <RenderComments 
+          comments={props.comments}
+          addComment={props.addComment}
+          campsiteId={props.campsite.id} 
+        />
+      </div>
+
+    </div>
+  } else {
+    return <div />
+  }
+
 }
 
 
