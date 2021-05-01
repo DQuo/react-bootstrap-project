@@ -3,23 +3,31 @@ import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron,
   Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
+
+//----------- Main Component: <Header /> ---------
+
 class Header extends Component {
 
   constructor(props) {
     super(props);
-    // State
+
+    //-----------------State----------------------
+    
     this.state = {
       isNavOpen: false,
       isModalOpen: false
     };
-    // Method Binds
+
+
+    //---------------Method Binds-----------------
+
     this.toggleNav = this.toggleNav.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handeLogin = this.handeLogin.bind(this);
   };
 
 
-  // Methods
+  //-------------------Methods--------------------
 
   toggleNav() {
     this.setState( { isNavOpen: !this.state.isNavOpen } );
@@ -34,10 +42,14 @@ class Header extends Component {
     this.toggleModal();
     event.preventDefault();
   }
+  
 
-
+  //--------------------Render---------------------
 
   render() {
+
+
+    //---------------- Return: UI -----------------
     return (
       <React.Fragment>
 
@@ -135,4 +147,5 @@ class Header extends Component {
   }
 }
 
+//------ Export --------
 export default Header;

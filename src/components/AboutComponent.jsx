@@ -1,10 +1,15 @@
+//---------------Imports----------------------
+
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 
+//--------- Main Component: <About /> ---------
+
 function About(props) {
 
+    // partners = []
     const partners = props.partners.map(partner => {
         return (
           <Media tag="li" key={partner.id}>
