@@ -3,10 +3,6 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
 
-
-
-
-// Export: fetchCampsites();
 export const fetchCampsites = () => dispatch => {
   dispatch(campsitesLoading());
 
@@ -92,6 +88,7 @@ export const addComment = (comment) => ({
   payload: comment
 });
 
+// Export: postComment();
 export const postComment = (campsiteId, rating, author, text) => (dispatch) => {
 
   const newComment = {
@@ -130,6 +127,24 @@ export const postComment = (campsiteId, rating, author, text) => (dispatch) => {
 
 };
 
+// Export: postFeedback();
+export const postFeedback = (feedback) => () => {
+
+  return (
+    fetch(baseUrl + 'feedback', {
+      method: "POST",
+      body: JSON.stringify(feedback),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => {
+      if (response.ok) {
+        alert("Thank you for your feedback!" + JSON.stringify(feedback))
+      } 
+    })
+  );
+};
+
 // fetchPromotions();
 export const fetchPromotions = () => (dispatch) => {
   dispatch(promotionsLoading());
@@ -166,4 +181,41 @@ export const promotionsFailed = errMess => ({
 export const addPromotions = (promotions) => ({
   type: ActionTypes.ADD_PROMOTIONS,
   payload: promotions
+})
+
+export const fetchPartners = () => (dispatch) => {
+  dispatch(partnersLoading());
+
+  return fetch(baseUrl + 'partners')
+          .then(response => {
+              if (response.ok) {
+                return response;
+              } else {
+                const error = new Error(`${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+              }
+          },
+          (error) => {
+            const errMess = new Error(error.message);
+            throw errMess;
+          }
+          )
+          .then(response => response.json())
+          .then(partners => dispatch(addPartners(partners)))
+          .catch(error => dispatch(partnersFailed(error.message)));
+};
+
+export const partnersLoading = () => ({
+  type: ActionTypes.PARTNERS_LOADING
+});
+
+export const partnersFailed = (errMess) => ({
+  type: ActionTypes.PARTNERS_FAILED,
+  payload: errMess
+});
+
+export const addPartners = (partners) => ({
+  type: ActionTypes.ADD_PARTNERS,
+  payload: partners
 })
